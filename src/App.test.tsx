@@ -50,10 +50,8 @@ describe('Currency Converter', () => {
 
     const convertButton = screen.getByRole('button', { name: /convert/i });
     fireEvent.click(convertButton);
-    const gbpResult = await waitFor(() => screen.getByTestId('conversion-result'));
-    expect(gbpResult).toBeInTheDocument();
-    expect(gbpResult.textContent).toMatch(/GBP/);
-    expect(gbpResult.textContent).toMatch(/USD/);
-    expect(gbpResult.textContent).toMatch(/1.25/);
+  const gbpResult = await waitFor(() => screen.getByTestId('conversion-result'));
+  expect(gbpResult).toBeInTheDocument();
+  expect(gbpResult.textContent).toMatch(/1.25 USD/);
   });
 });

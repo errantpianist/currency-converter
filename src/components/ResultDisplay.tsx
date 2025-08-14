@@ -6,13 +6,15 @@ interface ResultDisplayProps {
   targetCurrency: string
   amount: string
   result: number | null
+  lastUpdated?: number | null
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ 
   baseCurrency,
   targetCurrency,
   amount,
-  result 
+  result,
+  lastUpdated
 }) => {
   if (result === null) return null
 
@@ -42,7 +44,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
           {formattedAmount} {baseCurrency} =
         </div>
         <div className="text-3xl font-extrabold text-blue-800 mb-2" data-testid="conversion-result">
-          {formattedResult} {targetCurrency}
+         {formattedResult} {targetCurrency}
         </div>
         <div className="text-sm text-gray-700 mb-1">
           1 {baseCurrency} = {formattedRate} {targetCurrency}
@@ -50,6 +52,11 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
         <div className="text-sm text-gray-700">
           1 {targetCurrency} = {formattedReciprocal} {baseCurrency}
         </div>
+        {lastUpdated && (
+          <div className="text-xs text-gray-500 mt-4" data-testid="last-updated">
+            Last updated: {new Date(lastUpdated).toLocaleString()}
+          </div>
+        )}
       </div>
     </div>
   )

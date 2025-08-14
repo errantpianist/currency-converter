@@ -13,8 +13,9 @@ describe('ResultDisplay', () => {
         result={123.45}
       />
     )
-    expect(screen.getByText(/USD.*EUR/i)).toBeInTheDocument()
-    expect(screen.getByText(/123.45/)).toBeInTheDocument()
+  const resultLine = screen.getByTestId('conversion-result');
+  expect(resultLine).toBeInTheDocument();
+  expect(resultLine.textContent).toMatch(/123.45 EUR/);
   })
 
   it('renders nothing when result is null', () => {

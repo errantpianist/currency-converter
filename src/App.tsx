@@ -30,7 +30,8 @@ const App: React.FC = () => {
     rates,
     loading,
     error,
-    currencyList
+    currencyList,
+    lastFetched
   } = useSelector((state: RootState) => state.currency)
 
   // Track if conversion has been triggered for current pair
@@ -210,6 +211,7 @@ const App: React.FC = () => {
           targetCurrency={targetCurrency}
           amount={amount}
           result={result}
+          lastUpdated={lastFetched[baseCurrency] || null}
         />
       )}
     </div>
