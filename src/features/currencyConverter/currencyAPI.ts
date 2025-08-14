@@ -1,4 +1,4 @@
-const BASE_URL = 'http://www.floatrates.com/daily'
+const BASE_URL = 'https://www.floatrates.com/daily'
 
 export interface RateData {
   code: string
