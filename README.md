@@ -6,12 +6,12 @@ Instantly convert currencies using up-to-date exchange rates from [floatrates](h
 ![Screenshot](assets/screenshot.png)
 
 ## Features
-- Select base and target currencies
+- Select base and target currencies (with flags from country-flag-icons 🇬🇧)
 - Enter an amount (max 2 decimals)
 - See conversion result, rounded to 2 decimals
 - Cache prevents repeated API calls within a short time
 - Responsive, accessible UI (Tailwind CSS v4)
-- Robust validation and error handling
+- Validation and error handling
 - Redux for state management
 - Unit and integration tests (Vitest + React Testing Library)
 
@@ -37,8 +37,3 @@ Run all tests:
 npm test
 ```
 Unit tests are in `src/__tests__`. Integration test is in `src/App.test.tsx`.
-
-## Design Decisions
-- Tailwind v4 for modern, responsive UI
-- Accessibility: aria labels, live regions, keyboard navigation
-- Redux for scalable state management
