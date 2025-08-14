@@ -6,6 +6,7 @@ interface AmountInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   error?: string
   focusTrigger?: number
+  onEnter?: () => void
 }
 
 
@@ -13,7 +14,8 @@ const AmountInput: React.FC<AmountInputProps> = ({
   value, 
   onChange,
   error,
-  focusTrigger
+  focusTrigger,
+  onEnter
 }) => {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -37,12 +39,17 @@ const AmountInput: React.FC<AmountInputProps> = ({
         inputMode="decimal"
         value={value}
         onChange={onChange}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && onEnter) {
+            onEnter()
+          }
+        }}
         placeholder="Enter amount"
         autoComplete="off"
         aria-label="Amount to convert"
         aria-invalid={!!error}
         aria-describedby={error ? 'amount-error' : undefined}
-  className={`w-full px-4 py-3 border-2 rounded-md text-lg transition-colors focus:outline-none bg-[var(--input-bg)] text-[var(--text-color)] focus:border-[var(--toggle-focus)] ${error ? 'border-red-500' : 'border-[var(--input-border)]'}`}
+        className={`w-full px-4 py-3 border-2 rounded-md text-lg transition-colors focus:outline-none bg-[var(--input-bg)] text-[var(--text-color)] focus:border-[var(--toggle-focus)] ${error ? 'border-red-500' : 'border-[var(--input-border)]'}`}
       />
       {error && <p id="amount-error" className="text-red-500 text-sm mt-2" aria-live="polite">{error}</p>}
     </div>

@@ -215,6 +215,7 @@ const App: React.FC = () => {
         }}
         error={amountError}
         focusTrigger={focusTrigger}
+        onEnter={handleConvert}
       />
 
       <ConvertButton
