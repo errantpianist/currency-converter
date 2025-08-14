@@ -5,7 +5,6 @@ import { store } from '../src/store/store';
 import '@testing-library/jest-dom';
 import App from '../src/App';
 import * as currencyAPI from '../src/features/currencyConverter/currencyAPI';
-import userEvent from '@testing-library/user-event';
 
 describe('Currency Converter', () => {
   beforeAll(() => {
