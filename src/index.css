@@ -1,3 +1,13 @@
+/* Navy blue gradient background for the whole page */
+body {
+	min-height: 100vh;
+	background: linear-gradient(135deg, #23395d 0%, #1e3a5c 60%, #3b5998 100%);
+	background-attachment: fixed;
+}
+/* Light gradient background for main container */
+.gradient-bg {
+	background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+}
 @import "tailwindcss";
 
 @keyframes fadeIn {

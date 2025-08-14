@@ -43,6 +43,13 @@ const App: React.FC = () => {
   // Get rates for the current base currency
   const currentRates = rates[baseCurrency] || {}
   const currencyCodes = currencyList
+      // Swap base and target currencies
+      const handleSwapCurrencies = () => {
+        // If base and target are the same, do nothing
+        if (baseCurrency === targetCurrency) return
+        dispatch(setBaseCurrency(targetCurrency))
+        dispatch(setTargetCurrency(baseCurrency))
+      }
   const targetCurrencyOptions = currencyCodes.filter(code => code !== baseCurrency)
 
   // Helper to get current pair key
@@ -129,7 +136,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
+    <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg gradient-bg">
       <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Currency Converter</h1>
 
       {loading && (
@@ -142,35 +149,47 @@ const App: React.FC = () => {
         </div>
       )}
 
-        {/* Show API error in ErrorMessage banner, only if there is an API error and no amount error */}
-        {error && !amountError && (
-          <ErrorMessage message={error} />
-        )}
+      {/* Show API error in ErrorMessage banner, only if there is an API error and no amount error */}
+      {error && !amountError && (
+        <ErrorMessage message={error} />
+      )}
 
-      <CurrencyDropdown
-        label="Base Currency"
-        value={baseCurrency}
-        onChange={(value) => {
-          dispatch(setBaseCurrency(value))
-        }}
-        options={currencyCodes}
-        disabled={loading}
-      />
-
-      <CurrencyDropdown
-        label="Target Currency"
-        value={targetCurrency}
-        onChange={(value) => {
-          dispatch(setTargetCurrency(value))
-        }}
-        options={targetCurrencyOptions}
-        disabled={loading}
-      />
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1">
+          <CurrencyDropdown
+            label="Base Currency"
+            value={baseCurrency}
+            onChange={(value) => dispatch(setBaseCurrency(value))}
+            options={currencyCodes}
+            disabled={loading}
+          />
+        </div>
+        <button
+          type="button"
+          aria-label="Swap currencies"
+          className="bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full p-2 w-10 h-10 flex items-center justify-center shadow transition duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          onClick={handleSwapCurrencies}
+          disabled={loading || baseCurrency === targetCurrency}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 7l4-4m-4 4l4 4M20 17H4m16 0l-4-4m4 4l-4 4" />
+          </svg>
+        </button>
+        <div className="flex-1">
+          <CurrencyDropdown
+            label="Target Currency"
+            value={targetCurrency}
+            onChange={(value) => dispatch(setTargetCurrency(value))}
+            options={targetCurrencyOptions}
+            disabled={loading}
+          />
+        </div>
+      </div>
 
       <AmountInput
         value={amount}
-        onChange={(e) => {
-          let val = e.target.value
+        onChange={(event) => {
+          const val = event.target.value
           // Allow leading minus sign, digits, and up to 2 decimals
           if (/^-?\d*(\.\d{0,2})?$/.test(val) || val === '' || /^-?\d+\.$/.test(val)) {
             dispatch(setAmount(val))
