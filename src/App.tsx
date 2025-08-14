@@ -1,0 +1,200 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { 
+  setBaseCurrency, 
+  setTargetCurrency, 
+  setAmount,
+  setResult,
+  clearResult,
+  setError,
+  clearError,
+  fetchRates
+} from './features/currencyConverter/currencySlice'
+import type { RootState } from './store/store'
+import type { AppDispatch } from './store/store'
+import CurrencyDropdown from './components/CurrencyDropdown'
+import AmountInput from './components/AmountInput'
+import ConvertButton from './components/ConvertButton'
+import ResultDisplay from './components/ResultDisplay'
+import ErrorMessage from './components/ErrorMessage'
+
+
+const App: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const {
+    baseCurrency,
+    targetCurrency,
+    amount,
+    result,
+    rates,
+    loading,
+    error,
+    currencyList
+  } = useSelector((state: RootState) => state.currency)
+
+  // Track if conversion has been triggered for current pair
+  const [conversionTriggered, setConversionTriggered] = useState(false)
+  // Used to trigger focus on AmountInput
+  const [focusTrigger, setFocusTrigger] = useState(0)
+  const prevPairRef = useRef<string>("")
+  const justResetRef = useRef(false)
+
+  // Get rates for the current base currency
+  const currentRates = rates[baseCurrency] || {}
+  const currencyCodes = currencyList
+  const targetCurrencyOptions = currencyCodes.filter(code => code !== baseCurrency)
+
+  // Helper to get current pair key
+  const getPairKey = () => `${baseCurrency}_${targetCurrency}`
+
+  // Reset conversion trigger and result when currency pair changes
+  useEffect(() => {
+    dispatch(fetchRates(baseCurrency))
+    dispatch(clearResult())
+    setConversionTriggered(false)
+    justResetRef.current = true
+    prevPairRef.current = getPairKey()
+  }, [dispatch, baseCurrency, targetCurrency])
+
+  // Validate amount: only allow positive numbers, max 2 decimals
+  const validateAmount = (): string => {
+  if (!amount) return ''
+  let validateValue = amount.endsWith('.') ? amount.slice(0, -1) : amount
+  // Allow negative sign in input, but catch in error logic
+  const num = parseFloat(validateValue)
+  if (isNaN(num)) return 'Please enter a valid number'
+  if (num <= 0) return 'Amount must be greater than zero'
+  if (num > 1000000000) return 'Maximum allowed amount is 1,000,000,000'
+  // Accept negative sign in input, but only positive numbers with up to 2 decimals are valid
+  if (!/^(-?\d+)?(\.\d{1,2})?$/.test(validateValue)) return 'Maximum 2 decimal places allowed'
+  return ''
+  }
+
+  const amountError = validateAmount()
+
+  // Clear API error when amountError is cleared
+  useEffect(() => {
+    if (!amountError && error) {
+      dispatch(clearError())
+    }
+  }, [amountError, error, dispatch])
+
+  // Real-time conversion only if triggered for current pair and rates are loaded
+  useEffect(() => {
+    // If amount becomes empty or invalid, reset conversionTriggered and clear result
+    if (!amount || amountError) {
+      setConversionTriggered(false)
+      dispatch(clearResult())
+      if (amountError) dispatch(setError(amountError))
+      return
+    }
+    if (!conversionTriggered) return
+    if (justResetRef.current) {
+      justResetRef.current = false
+      return
+    }
+    if (loading) return // Wait for rates to load
+    dispatch(clearError())
+    const num = parseFloat(amount)
+    const rate = currentRates[targetCurrency]?.rate
+    if (rate) {
+      const convertedAmount = num * rate
+      dispatch(setResult(convertedAmount))
+    } else {
+      dispatch(setError('Exchange rate not available'))
+    }
+  }, [amount, conversionTriggered, baseCurrency, targetCurrency, currentRates, amountError, loading, dispatch])
+
+  // Convert button handler: trigger conversion for current pair
+  const handleConvert = () => {
+    setConversionTriggered(true)
+    setFocusTrigger(focusTrigger + 1)
+    dispatch(clearError())
+    const error = validateAmount()
+    if (loading) return // Wait for rates to load
+    if (!amount || error) {
+      dispatch(clearResult())
+      if (error) dispatch(setError(error))
+      return
+    }
+    const num = parseFloat(amount)
+    const rate = currentRates[targetCurrency]?.rate
+    if (rate) {
+      const convertedAmount = num * rate
+      dispatch(setResult(convertedAmount))
+    } else {
+      dispatch(setError('Exchange rate not available'))
+    }
+  }
+
+  return (
+    <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Currency Converter</h1>
+
+      {loading && (
+        <div className="flex items-center justify-center mb-4">
+          <svg className="animate-spin h-6 w-6 text-blue-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+          </svg>
+          <span className="text-blue-500 font-medium">Loading exchange rates...</span>
+        </div>
+      )}
+
+        {/* Show API error in ErrorMessage banner, only if there is an API error and no amount error */}
+        {error && !amountError && (
+          <ErrorMessage message={error} />
+        )}
+
+      <CurrencyDropdown
+        label="Base Currency"
+        value={baseCurrency}
+        onChange={(value) => {
+          dispatch(setBaseCurrency(value))
+        }}
+        options={currencyCodes}
+        disabled={loading}
+      />
+
+      <CurrencyDropdown
+        label="Target Currency"
+        value={targetCurrency}
+        onChange={(value) => {
+          dispatch(setTargetCurrency(value))
+        }}
+        options={targetCurrencyOptions}
+        disabled={loading}
+      />
+
+      <AmountInput
+        value={amount}
+        onChange={(e) => {
+          let val = e.target.value
+          // Allow leading minus sign, digits, and up to 2 decimals
+          if (/^-?\d*(\.\d{0,2})?$/.test(val) || val === '' || /^-?\d+\.$/.test(val)) {
+            dispatch(setAmount(val))
+          }
+        }}
+        error={amountError}
+        focusTrigger={focusTrigger}
+      />
+
+      <ConvertButton
+        onClick={handleConvert}
+        disabled={!!amountError || loading || !amount || conversionTriggered}
+      />
+
+      {conversionTriggered && (
+        <ResultDisplay
+          baseCurrency={baseCurrency}
+          targetCurrency={targetCurrency}
+          amount={amount}
+          result={result}
+        />
+      )}
+    </div>
+  )
+}
+
+export default App
