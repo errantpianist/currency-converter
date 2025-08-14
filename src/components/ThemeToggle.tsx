@@ -10,13 +10,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle }) => {
     <button
       type="button"
       aria-label="Toggle light/dark mode"
-      className="flex items-center gap-2 px-3 py-2 rounded-md border transition-colors focus:outline-none"
-      style={{
-        background: 'var(--input-bg)',
-        color: 'var(--text-color)',
-        borderColor: 'var(--input-border)',
-        boxShadow: '0 0 0 2px var(--toggle-focus)',
-      }}
+      className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-yellow-400 transition-colors"
       onClick={onToggle}
     >
       <span>
@@ -26,7 +20,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle }) => {
             <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
           </svg>
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-400 dark:text-gray-200">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
           </svg>
         )}

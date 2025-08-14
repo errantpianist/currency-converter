@@ -38,22 +38,22 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
   const formattedReciprocal = reciprocalRate ? reciprocalRate.toFixed(6) : '--'
 
   return (
-    <div className="mt-8 p-6 rounded-md text-center shadow" style={{ background: 'var(--result-bg, #e0e7ff)' }}>
+    <div className="mt-8 p-6 rounded-md text-center shadow bg-blue-50 dark:bg-gray-800">
       <div className="flex flex-col items-center">
-        <div className="text-sm mb-1" style={{ color: 'var(--result-label, #555)' }}>
+        <div className="text-sm mb-1 text-gray-700 dark:text-gray-300">
           {formattedAmount} {baseCurrency} =
         </div>
-        <div className="text-3xl font-extrabold mb-2" data-testid="conversion-result" style={{ color: 'var(--result-value, #2563eb)' }}>
+        <div className="text-3xl font-extrabold mb-2 text-blue-700 dark:text-blue-400" data-testid="conversion-result">
          {formattedResult} {targetCurrency}
         </div>
-        <div className="text-sm mb-1" style={{ color: 'var(--result-label, #555)' }}>
+        <div className="text-sm mb-1 text-gray-700 dark:text-gray-300">
           1 {baseCurrency} = {formattedRate} {targetCurrency}
         </div>
-        <div className="text-sm" style={{ color: 'var(--result-label, #555)' }}>
+        <div className="text-sm text-gray-700 dark:text-gray-300">
           1 {targetCurrency} = {formattedReciprocal} {baseCurrency}
         </div>
         {lastUpdated && (
-          <div className="text-xs mt-4" data-testid="last-updated" style={{ color: 'var(--result-date, #888)' }}>
+          <div className="text-xs mt-4 text-gray-500 dark:text-gray-400" data-testid="last-updated">
             Last updated: {new Date(lastUpdated).toLocaleString()}
           </div>
         )}

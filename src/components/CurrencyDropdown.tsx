@@ -10,6 +10,7 @@ interface CurrencyDropdownProps {
   onChange: (value: string) => void
   options: string[]
   disabled?: boolean
+  isDark?: boolean
 }
 
 // Helper: map currency code to country code for flag
@@ -88,7 +89,8 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
   value,
   onChange,
   options,
-  disabled = false
+  disabled = false,
+  isDark = false
 }) => {
   // React Select expects options as { value, label, icon }
   const selectOptions = options.map(currency => ({
@@ -97,7 +99,6 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
     icon: getFlagIcon(currency)
   }))
 
-  // Find the selected option object
   const selectedOption = selectOptions.find(opt => opt.value === value) || null
 
   // Custom option renderer for react-select
@@ -121,7 +122,7 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
   )
   return (
     <div className="mb-6">
-      <label htmlFor={label} className="block mb-2 font-semibold text-[var(--text-color)]">{label}</label>
+      <label htmlFor={label} className="block mb-2 font-semibold text-gray-700 dark:text-gray-200">{label}</label>
       <Select
         inputId={label}
         value={selectedOption}
@@ -136,28 +137,28 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
         styles={{
           control: (base, state) => ({
             ...base,
-            backgroundColor: 'var(--input-bg)',
-            color: 'var(--text-color)',
-            borderColor: state.isFocused ? 'var(--input-focus)' : 'var(--input-border)',
-            boxShadow: state.isFocused ? '0 0 0 2px var(--input-focus)' : 'none',
+            backgroundColor: isDark ? '#23272f' : '#fff',
+            color: isDark ? '#f3f4f6' : '#222',
+            borderColor: state.isFocused ? (isDark ? '#fbbf24' : '#3b82f6') : (isDark ? '#334155' : '#ccc'),
+            boxShadow: state.isFocused ? `0 0 0 2px ${isDark ? '#fbbf24' : '#3b82f6'}` : 'none',
           }),
           menu: (base) => ({
             ...base,
-            backgroundColor: 'var(--input-bg)',
-            color: 'var(--text-color)',
+            backgroundColor: isDark ? '#1e293b' : '#fff',
+            color: isDark ? '#f3f4f6' : '#222',
           }),
           option: (base, state) => ({
             ...base,
-            backgroundColor: state.isFocused ? 'var(--input-focus)' : 'var(--input-bg)',
-            color: 'var(--text-color)',
+            backgroundColor: state.isFocused ? (isDark ? '#334155' : '#e0e7ff') : (isDark ? '#1e293b' : '#fff'),
+            color: isDark ? '#f3f4f6' : '#222',
           }),
           singleValue: (base) => ({
             ...base,
-            color: 'var(--text-color)',
+            color: isDark ? '#f3f4f6' : '#222',
           }),
           placeholder: (base) => ({
             ...base,
-            color: 'var(--text-color)',
+            color: isDark ? '#cbd5e1' : '#888',
           }),
         }}
       />
