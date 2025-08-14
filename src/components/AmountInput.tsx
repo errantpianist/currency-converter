@@ -34,6 +34,7 @@ const AmountInput: React.FC<AmountInputProps> = ({
         ref={inputRef}
         id="amount"
         type="text"
+        inputMode="decimal"
         value={value}
         onChange={onChange}
         placeholder="Enter amount"
