@@ -3,6 +3,8 @@
 
 Instantly convert currencies using up-to-date exchange rates from [floatrates](http://floatrates.com)
 
+![Screenshot](assets/screenshot.png)
+
 ## Features
 - Select base and target currencies
 - Enter an amount (max 2 decimals)
