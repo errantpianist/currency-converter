@@ -1,6 +1,5 @@
 
 import React from 'react'
-import { CurrencyDollarIcon } from '@heroicons/react/24/solid'
 
 interface ResultDisplayProps {
   baseCurrency: string
@@ -30,15 +29,28 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
     maximumFractionDigits: 2
   }).format(result)
 
+  // Calculate exchange rates
+  const rate = parsedAmount === 0 || isNaN(parsedAmount) ? null : result / parsedAmount
+  const reciprocalRate = rate ? 1 / rate : null
+  const formattedRate = rate ? rate.toFixed(6) : '--'
+  const formattedReciprocal = reciprocalRate ? reciprocalRate.toFixed(6) : '--'
+
   return (
     <div className="mt-8 p-6 bg-blue-50 rounded-md text-center shadow">
-      <h3 className="flex items-center justify-center text-xl font-bold text-blue-700 mb-2">
-        <CurrencyDollarIcon className="w-5 h-5 text-blue-400 mr-2" />
-        Conversion Result
-      </h3>
-  <p className="text-lg font-semibold text-gray-800 opacity-0 animate-[fadeIn_0.8s_ease-in_forwards]" data-testid="conversion-result">
-        {formattedAmount} {baseCurrency} = {formattedResult} {targetCurrency}
-      </p>
+      <div className="flex flex-col items-center">
+        <div className="text-sm text-gray-600 mb-1">
+          {formattedAmount} {baseCurrency} =
+        </div>
+        <div className="text-3xl font-extrabold text-blue-800 mb-2" data-testid="conversion-result">
+          {formattedResult} {targetCurrency}
+        </div>
+        <div className="text-sm text-gray-700 mb-1">
+          1 {baseCurrency} = {formattedRate} {targetCurrency}
+        </div>
+        <div className="text-sm text-gray-700">
+          1 {targetCurrency} = {formattedReciprocal} {baseCurrency}
+        </div>
+      </div>
     </div>
   )
 }
