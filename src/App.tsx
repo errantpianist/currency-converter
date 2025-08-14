@@ -146,7 +146,12 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={`max-w-xl mx-auto mt-10 p-8 rounded-lg shadow-lg gradient-bg`}>
+    <div
+      className={
+        `sm:max-w-xl max-w-sm w-full mx-auto mt-10 px-4 p-8 rounded-lg shadow-lg gradient-bg ` +
+        `overflow-hidden h-[90vh] sm:overflow-auto sm:h-auto`
+      }
+    >
       <div className="flex justify-between items-center mb-4">
   <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--title-color, #2563eb)' }}>Currency Converter</h1>
         <ThemeToggle theme={theme} onToggle={handleToggleTheme} />
@@ -226,7 +231,7 @@ const App: React.FC = () => {
           lastUpdated={lastFetched[baseCurrency] || null}
         />
       )}
-    </div>
+  </div>
   )
 }
 
