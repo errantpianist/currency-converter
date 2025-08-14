@@ -121,7 +121,7 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
   )
   return (
     <div className="mb-6">
-      <label htmlFor={label} className="block mb-2 font-semibold text-gray-700">{label}</label>
+      <label htmlFor={label} className="block mb-2 font-semibold text-[var(--text-color)]">{label}</label>
       <Select
         inputId={label}
         value={selectedOption}
@@ -133,6 +133,33 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
         placeholder={`Select ${label}`}
         aria-label={label}
         components={{ Option, SingleValue }}
+        styles={{
+          control: (base, state) => ({
+            ...base,
+            backgroundColor: 'var(--input-bg)',
+            color: 'var(--text-color)',
+            borderColor: state.isFocused ? 'var(--input-focus)' : 'var(--input-border)',
+            boxShadow: state.isFocused ? '0 0 0 2px var(--input-focus)' : 'none',
+          }),
+          menu: (base) => ({
+            ...base,
+            backgroundColor: 'var(--input-bg)',
+            color: 'var(--text-color)',
+          }),
+          option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isFocused ? 'var(--input-focus)' : 'var(--input-bg)',
+            color: 'var(--text-color)',
+          }),
+          singleValue: (base) => ({
+            ...base,
+            color: 'var(--text-color)',
+          }),
+          placeholder: (base) => ({
+            ...base,
+            color: 'var(--text-color)',
+          }),
+        }}
       />
     </div>
   )

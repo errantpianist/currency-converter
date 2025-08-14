@@ -42,7 +42,7 @@ const AmountInput: React.FC<AmountInputProps> = ({
         aria-label="Amount to convert"
         aria-invalid={!!error}
         aria-describedby={error ? 'amount-error' : undefined}
-        className={`w-full px-4 py-3 border-2 rounded-md text-lg transition-colors focus:outline-none focus:border-blue-500 ${error ? 'border-red-500' : 'border-gray-300'}`}
+  className={`w-full px-4 py-3 border-2 rounded-md text-lg transition-colors focus:outline-none bg-[var(--input-bg)] text-[var(--text-color)] focus:border-[var(--toggle-focus)] ${error ? 'border-red-500' : 'border-[var(--input-border)]'}`}
       />
       {error && <p id="amount-error" className="text-red-500 text-sm mt-2" aria-live="polite">{error}</p>}
     </div>

@@ -14,7 +14,11 @@ const ConvertButton: React.FC<ConvertButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       aria-label="Convert currency"
-      className="w-full py-3 bg-blue-600 text-white rounded-md font-semibold text-lg transition-colors hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+      className="w-full py-3 rounded-md font-semibold text-lg transition-colors disabled:cursor-not-allowed bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover)]"
+      style={{
+        background: disabled ? 'var(--button-disabled-bg, #d1d5db)' : 'var(--button-bg)',
+        color: 'var(--button-text)',
+      }}
     >
       Convert
     </button>

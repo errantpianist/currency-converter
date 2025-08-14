@@ -17,9 +17,18 @@ import AmountInput from './components/AmountInput'
 import ConvertButton from './components/ConvertButton'
 import ResultDisplay from './components/ResultDisplay'
 import ErrorMessage from './components/ErrorMessage'
+import ThemeToggle from './components/ThemeToggle'
 
 
 const App: React.FC = () => {
+  // Theme state
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  // Apply theme class to body
+  useEffect(() => {
+    document.body.classList.remove('theme-light', 'theme-dark')
+    document.body.classList.add(`theme-${theme}`)
+  }, [theme])
+  const handleToggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light')
   const dispatch = useDispatch<AppDispatch>()
 
   const {
@@ -137,8 +146,11 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg gradient-bg">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Currency Converter</h1>
+    <div className={`max-w-xl mx-auto mt-10 p-8 rounded-lg shadow-lg gradient-bg`}>
+      <div className="flex justify-between items-center mb-4">
+  <h1 className="text-3xl font-bold text-center" style={{ color: 'var(--title-color, #2563eb)' }}>Currency Converter</h1>
+        <ThemeToggle theme={theme} onToggle={handleToggleTheme} />
+      </div>
 
       {loading && (
         <div className="flex items-center justify-center mb-4">
