@@ -100,6 +100,10 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
             ...base,
             color: isDark ? '#cbd5e1' : '#888',
           }),
+          input: (base) => ({
+            ...base,
+            color: isDark ? '#f3f4f6' : '#222',
+          }),
         }}
       />
     </div>
